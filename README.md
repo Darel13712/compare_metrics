@@ -1,21 +1,25 @@
 # Сравнение реализаций метрик
+## Разногласия
+MAP:
+Разное усреднение в AP
+- replay и recBole усредняет по k
+- rs_metrics и betaRecsys по количеству релевантных
+- daisyRec первоначально падал, выдает что-то третье, меньше всех
+- elliot?? Очень большое значение
 
-| lib        | HitRate@20 | MAP@20 | MRR@20 | NDCG@20 | Precision@20 | Recall@20 | RocAuc@20 |
-| ---------- | ---------- | ------ | ------ | ------- | ------------ | --------- | --------- |
-| replay     | 0.4746     | 0.0393 | 0.1863 | 0.0933  | 0.0575       | 0.0963    | 0.2832    |
-| rs_metrics | 0.4746     | 0.0317 | 0.1863 | 0.0933  | 0.0575       | 0.0963    | —         |
-| daisyrec   | 0.474570   | FAIL   | 0.2748 | 1.0     | 0.0575       | 0.0963    | FAIL      |
-| recbole    | 0.474570   | 0.0392 | 0.1863 | 0.0932  | 0.0575       | 0.0963    | 0.28317*  |
-| elliot     | 0.474570   | 0.0729 | 0.1863 | 0.0898  | 0.0575       | 0.0963    | 0.62689   |
-| betaRecsys | -          | 0.0316 | -      | 0.0932  | 0.0575       | 0.0963    | 0.51050   |
-|            |            |        |        |         |              |           |           |
-|            |            |        |        |         |              |           |           |
-|            |            |        |        |         |              |           |           |
-|            |            |        |        |         |              |           |           |
-|            |            |        |        |         |              |           |           |
-|            |            |        |        |         |              |           |           |
-|            |            |        |        |         |              |           |           |
+HitRate:
+- betaRecsys ?
 
+MRR:
+- daisyRec ищет не первый релевантный, а суммирует все. т.е. он не ограничен единицей
+
+NDCG:
+- daisyRec почему-то выдал единицу
+- elliot почему-то маленькое значение
+
+RocAuc:
+- daisyRec упал
+- elliot и beta почему-то большие значения
 
 
 ## Описание файлов
@@ -49,11 +53,11 @@
 
 
 - [x] replay
-- [ ] [Beta-Recsys](https://github.com/beta-team/beta-recsys)
-- [ ] [DaisyRec](https://github.com/AmazingDD/daisyRec)
-- [ ] [RecBole](https://github.com/RUCAIBox/RecBole)
+- [x] [Beta-Recsys](https://github.com/beta-team/beta-recsys)
+- [x] [DaisyRec](https://github.com/AmazingDD/daisyRec)
+- [x] [RecBole](https://github.com/RUCAIBox/RecBole)
 - [ ] [MSRecommenders](https://github.com/microsoft/recommenders)
-- [ ] [elliot](https://github.com/sisinflab/elliot)
+- [x] [elliot](https://github.com/sisinflab/elliot)
 - [ ] [NeuRec](https://github.com/wubinzzu/NeuRec)
 - [ ] [surprise](https://github.com/NicolasHug/Surprise)
 - [ ] [OpenRec](https://github.com/ylongqi/openrec)
