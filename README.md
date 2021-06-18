@@ -11,6 +11,7 @@
 **HitRate:**
 - betaRecsys ?
 - в Suprise нет метрики
+- в NeuRec бага в коде - должно быть "in" вместо "==": https://github.com/wubinzzu/NeuRec/blob/c33333df028d861473ff050338c974e5f4bb5dc5/evaluator/backend/python/metric.py#L12
 
 **MRR:**<br/>
 Определяется как обратная позиция первой релевантной рекомендации в списке первых K рекомендаций. Это значение усредняется по всем пользователям. 
@@ -96,9 +97,9 @@ beta recsys скопировали себе код MS Recommeders один в о
 - [x] [Beta-Recsys](https://github.com/beta-team/beta-recsys)
 - [x] [DaisyRec](https://github.com/AmazingDD/daisyRec)
 - [x] [RecBole](https://github.com/RUCAIBox/RecBole)
-- [ ] [MSRecommenders](https://github.com/microsoft/recommenders)
+- [x] [MSRecommenders](https://github.com/microsoft/recommenders)
 - [x] [elliot](https://github.com/sisinflab/elliot)
-- [ ] [NeuRec](https://github.com/wubinzzu/NeuRec)
+- [x] [NeuRec](https://github.com/wubinzzu/NeuRec)
 - [x] [surprise](https://github.com/NicolasHug/Surprise)
 - [x] [OpenRec](https://github.com/ylongqi/openrec)
 - [ ] [RecsysPytorch](https://github.com/yoongi0428/RecSys_PyTorch)
