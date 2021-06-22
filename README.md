@@ -1,13 +1,16 @@
 # Сравнение реализаций метрик
 ## Разногласия
-**MAP:**<br/>
-Разное усреднение в AP
-- replay и recBole усредняет по k
-- rs_metrics и betaRecsys по количеству релевантных
-- daisyRec первоначально падал, выдает что-то третье, меньше всех
-- elliot?? Очень большое значение
-- в Suprise нет метрики
-- 
+**MAP:**
+Различия идут от формулы average precision (AP) - precision@K суммируются и делятся на разные числа, вот варианты:<br/>
+Если не оговорено иное, AP пользователей, у которых нет релевантных объектов в тесте, заполняются нулями, и precision@K используются только те, где k-й элемент релевантный.
+1) в знаменателе K: daisyRec (мы пофиксили маленький баг(*))
+2) в знаменателе число релевантных объектов из теста: rs_metrics, betaRecsys
+3) в знаменателе min(число релевантных объектов из теста, K): replay и recBole
+4) elliot просто усредняет (https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L69) и не заполняет нулями AP - MAP просто не учитывает их при усреднении (https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L98), кроме того AP считает все precision@K, а не только где k-й элемент релевантный (https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L69).
+5) neuRec заполняет нулями precision@K, где k-й элемент нерелевантен (https://github.com/wubinzzu/NeuRec/blob/master/evaluator/backend/python/metric.py#L36), делит на число релевантных объектов из теста (r_num: https://github.com/wubinzzu/NeuRec/blob/master/evaluator/backend/python/metric.py#L40).
+<br/>
+
+
 **HitRate:**
 - betaRecsys ?
 - в Suprise нет метрики
