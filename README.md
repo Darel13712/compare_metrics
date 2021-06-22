@@ -1,6 +1,6 @@
 # Сравнение реализаций метрик
 ## Разногласия
-**MAP:**
+**MAP:**<br/>
 Различия идут от формулы average precision (AP) - precision@K суммируются и делятся на разные числа, вот варианты:<br/>
 Если не оговорено иное, AP пользователей, у которых нет релевантных объектов в тесте, заполняются нулями, и precision@K используются только те, где k-й элемент релевантный.
 1) в знаменателе K: daisyRec (мы пофиксили маленький баг(*))
@@ -11,7 +11,7 @@
 <br/>
 
 
-**HitRate:**
+**HitRate:**<br/>
 - betaRecsys ?
 - в Suprise нет метрики
 - в NeuRec бага в коде - должно быть "in" вместо "==": https://github.com/wubinzzu/NeuRec/blob/c33333df028d861473ff050338c974e5f4bb5dc5/evaluator/backend/python/metric.py#L12
@@ -22,11 +22,9 @@
 - в Suprise из метрик реализованы только rmse, mse, в примерах есть код, который вне библиотеки считает precision и recall.
 - в Suprise нет метрики.
 
-**NDCG:**
-- daisyRec почему-то выдал единицу
-- elliot почему-то маленькое значение
-- в Suprise из метрик реализованы только rmse, mse, в примерах есть код, который вне библиотеки считает precision и recall
-- в Suprise нет метрики
+**NDCG:**<br/>
+DCG имеет 2 реализации, которые дают одинаковый скор в случае, когда предсказанные скоры бинарные, альтернативная формула учитвает порядок элементов в списке путем домножения релевантности элемента на вес равный обратному логарифму номера позиции: https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Discounted_Cumulative_Gain<br/>
+- elliot использует альтернативную DCG и не считает NDCG для пользователей, у которых нет релевантных объектов в тесте (https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/ndcg/ndcg.py#L125), 
 
 **ROC AUC:**<br/>
 Глобально используют несколько подходов:
@@ -45,7 +43,7 @@ https://wiki.epfl.ch/edicpublic/documents/Candidacy%20exam/Evaluation.pdf
 - в RecBole в коде видно, что все предикты просто стакаются - нет никакого разделения по пользователям (https://github.com/RUCAIBox/RecBole/blob/master/recbole/evaluator/evaluators.py#L331).
 - в OpenRec .
 
-Заметки:
+Итого:
 - replay использует 1й спрособ.
 - recBole 2й и 5й. 
 - openRec по сути использует 1й, но умеет считать только ROC AUC для каждого пользователя в отдельности. Сам усреднил, наны заполнил нулями.
@@ -56,16 +54,16 @@ https://wiki.epfl.ch/edicpublic/documents/Candidacy%20exam/Evaluation.pdf
 - daisyRec упал
 - rs_metrics?
 
-**Precision:**
+**Precision:**<br/>
 - в Suprise из метрик реализованы только rmse, mse, в примерах есть код, который вне библиотеки считает precision и recall.
 - в openRec реализация осталась на tf1 в модуле legacy, хотя библиотека переехала на tf2.
 
-**Recall:**
+**Recall:**<br/>
 - в Suprise из метрик реализованы только rmse, mse, в примерах есть код, который вне библиотеки считает precision и recall.
 
 ## Примечания
 beta recsys скопировали себе код MS Recommeders один в один.
-
+в Suprise из метрик реализованы только rmse, mse, в примерах есть код, который вне библиотеки считает precision и recall
 ## Описание файлов
 
 - `pred.csv` – предсказание модели
