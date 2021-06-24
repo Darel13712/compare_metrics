@@ -1,30 +1,31 @@
 # Сравнение реализаций метрик
 ## Разногласия
 **MAP:**<br/>
-Различия идут от формулы average precision (AP) - precision@K суммируются и делятся на разные числа, вот варианты:<br/>
+Различия идут от формулы average precision (AP):<br/>
 Если не оговорено иное, AP пользователей, у которых нет релевантных объектов в тесте, заполняются нулями, и precision@K используются только те, где k-й элемент релевантный.
-1) в знаменателе K: daisyRec (мы пофиксили маленький баг(*))
-2) в знаменателе число релевантных объектов из теста: rs_metrics, betaRecsys
-3) в знаменателе min(число релевантных объектов из теста, K): replay и recBole
-4) elliot просто усредняет (https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L69) и не заполняет нулями AP - MAP просто не учитывает их при усреднении (https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L98), кроме того AP считает все precision@K, а не только где k-й элемент релевантный (https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L69).
-5) neuRec заполняет нулями precision@K, где k-й элемент нерелевантен (https://github.com/wubinzzu/NeuRec/blob/master/evaluator/backend/python/metric.py#L36), делит на число релевантных объектов из теста (r_num: https://github.com/wubinzzu/NeuRec/blob/master/evaluator/backend/python/metric.py#L40).
+
+1) AP@K = (сумма precision@i для i, где 0 < i < K и i-й айтем в предсказании - релевантный) / K : daisyRec (мы пофиксили маленький баг(*))
+2) AP@K = (сумма precision@i для i, где 0 < i < K и i-й айтем в предсказании - релевантный) / (число релевантных объектов из теста) : rs_metrics, betaRecsys.
+3) AP@K = (сумма precision@i для i, где 0 < i < K и i-й айтем в предсказании - релевантный) / [min(число релевантных объектов из теста, K)](https://github.com/wubinzzu/NeuRec/blob/master/evaluator/backend/python/metric.py#L40) : replay, recBole, neuRec. В формуле используется [cumsum](https://github.com/wubinzzu/NeuRec/blob/master/evaluator/backend/python/metric.py#L39), из-за которого в формуле AP знаменатель получается как сумма из минимумов.
+
+4) AP@K = [все](https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L69) (precision@i, где 0 < i < K) усредняются : elliot. С учетом того, что используются все precision, это равносильно делению на K. MAP не приравнивается нулю для пользователей, у которых нет релевантных айтемов в тесте - для них просто [не выдается](https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L98) MAP, поэтому уреднение MAP всех пользователей дает число выше. 
 <br/>
 
-
 **HitRate:**<br/>
-- betaRecsys ?
-- в Suprise нет метрики
 - в NeuRec бага в коде - должно быть "in" вместо "==": https://github.com/wubinzzu/NeuRec/blob/c33333df028d861473ff050338c974e5f4bb5dc5/evaluator/backend/python/metric.py#L12
+- https://github.com/MaurizioFD/RecSys2019_DeepLearning_Evaluation/blob/master/Base/Evaluation/Evaluator.py#L339
 
 **MRR:**<br/>
 Определяется как обратная позиция первой релевантной рекомендации в списке первых K рекомендаций. Это значение усредняется по всем пользователям. 
 - daisyRec ищет не первый релевантный, а суммирует все обратные релевантные ранги для каждого пользователя.
-- в Suprise из метрик реализованы только rmse, mse, в примерах есть код, который вне библиотеки считает precision и recall.
-- в Suprise нет метрики.
 
 **NDCG:**<br/>
 DCG имеет 2 реализации, которые дают одинаковый скор в случае, когда предсказанные скоры бинарные, альтернативная формула учитвает порядок элементов в списке путем домножения релевантности элемента на вес равный обратному логарифму номера позиции: https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Discounted_Cumulative_Gain<br/>
-- elliot использует альтернативную DCG и не считает NDCG для пользователей, у которых нет релевантных объектов в тесте (https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/ndcg/ndcg.py#L125), 
+- elliot использует альтернативную DCG (https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/ndcg/ndcg.py#L125)
+- daisyRec использует альтернативную формулу DCG.
+- betaRec, MSRecommenders, openRec используют обычную формулу.
+- RecBole и Neurec на вход просто принимают просто индексы релевантных или сами списки айтемов, то есть не воспринимает величину рейтинга, использует обычную формулу.
+
 
 **ROC AUC:**<br/>
 Глобально используют несколько подходов:
@@ -41,7 +42,6 @@ https://wiki.epfl.ch/edicpublic/documents/Candidacy%20exam/Evaluation.pdf
 
 По сути 1 и 2 способы различаются только в том, считать AUC по всем стакнутым или по отдельности для каждого пользователя. Для того, чтобы понять какой именно вариант релизован но не запускать весь пайплайн (иногда тяжело затолкать предикты), смотрел в код. Например:
 - в RecBole в коде видно, что все предикты просто стакаются - нет никакого разделения по пользователям (https://github.com/RUCAIBox/RecBole/blob/master/recbole/evaluator/evaluators.py#L331).
-- в OpenRec .
 
 Итого:
 - replay использует 1й спрособ.
@@ -50,20 +50,20 @@ https://wiki.epfl.ch/edicpublic/documents/Candidacy%20exam/Evaluation.pdf
 - betaRecsys и MSRecommenders использут один код, который считает по 2му способу.
 - elliot имеет в арсенале 3, 4, 5 способы. в Однако, отрбрасывает всех пользователей, у которых нет ground trues (другие библиотеки иногда заполняют такие нулями).
 В контексте ограничения предиктов нами топ 20, AUC и LAUC совпадают.
-- в Suprise нет метрики
 - daisyRec упал
-- rs_metrics?
 
 **Precision:**<br/>
-- в Suprise из метрик реализованы только rmse, mse, в примерах есть код, который вне библиотеки считает precision и recall.
+- в Suprise из метрик реализованы только rmse, mse, а в примерах есть код, который вне библиотеки считает precision и recall - его и использовал.
 - в openRec реализация осталась на tf1 в модуле legacy, хотя библиотека переехала на tf2.
 
 **Recall:**<br/>
-- в Suprise из метрик реализованы только rmse, mse, в примерах есть код, который вне библиотеки считает precision и recall.
+- в Suprise из метрик реализованы только rmse, mse, в примерах есть код, который вне библиотеки считает precision и recall - его и использовал.
 
 ## Примечания
-beta recsys скопировали себе код MS Recommeders один в один.
-в Suprise из метрик реализованы только rmse, mse, в примерах есть код, который вне библиотеки считает precision и recall
+beta recsys скопировали себе код MS Recommeders один в один.<br/>
+в Suprise из метрик реализованы только rmse, mse, остальные предлагается писать самим. В примерах есть только precision и recall.<br/>
+в NeuRec есть 2 бекенда расчета метрик - Cython и Python, использовал код python-бекенд.
+
 ## Описание файлов
 
 - `pred.csv` – предсказание модели
