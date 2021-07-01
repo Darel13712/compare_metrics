@@ -29,7 +29,7 @@ ReсBole | есть | -
 OpenRec | - | есть (считают DCG вместро nDCG - в рассчете нет деления на iDCG, кроме того непонятно зачем использовали [экспоненту](https://github.com/ylongqi/openrec/blob/a00de2345844858194ef43ab6845342114a5be93/openrec/tf2/metrics/ranking_metrics.py#L33), которая ни на что не влияет)
 BetaRecsys | есть | -
 MSRecommenders  | есть | -
-Elliot  | - | [есть](https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/ndcg/ndcg.py#L125)
+Elliot  | - | [есть](https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/ndcg/ndcg.py#L125) ([Из релевантностей вычитается порог и добавляется 1](https://github.com/sisinflab/elliot/blob/3bfc068f94a6f87d3f5e22a905b09a643496185a/elliot/evaluation/relevance/relevance.py#L80))
 RecSys2019_DL_Eval | есть (в формуле DCG в знаменателе логарифм натуральный, а не по основанию 2. Для рассчета iDCG берутся все GT relevances, не обрезанные по K) | -
 DaisyRec | - | есть
 RecSysPytorch | есть | -
