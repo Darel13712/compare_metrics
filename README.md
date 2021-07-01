@@ -12,14 +12,15 @@
 
 **HitRate:**<br/>
 - в NeuRec бага в коде - должно быть "in" вместо "==": https://github.com/wubinzzu/NeuRec/blob/c33333df028d861473ff050338c974e5f4bb5dc5/evaluator/backend/python/metric.py#L12
-- https://github.com/MaurizioFD/RecSys2019_DeepLearning_Evaluation/blob/master/Base/Evaluation/Evaluator.py#L339
+- в RecSys2019_DeepLearning_Evaluation [считается](https://github.com/MaurizioFD/RecSys2019_DeepLearning_Evaluation/blob/master/Base/Evaluation/Evaluator.py#L339) как среднее число хитов пользователей. https://github.com/MaurizioFD/RecSys2019_DeepLearning_Evaluation/issues/19
 
 **MRR:**<br/>
 Определяется как обратная позиция первой релевантной рекомендации в списке первых K рекомендаций. Это значение усредняется по всем пользователям. 
 - daisyRec ищет не первый релевантный, а суммирует все обратные релевантные ранги для каждого пользователя.
 
 **NDCG:**<br/>
-DCG имеет 2 реализации, которые дают одинаковый скор в случае, когда предсказанные скоры бинарные, альтернативная формула учитвает порядок элементов в списке путем домножения релевантности элемента на вес равный обратному логарифму номера позиции: https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Discounted_Cumulative_Gain<br/>
+DCG имеет 2 реализации, которые дают одинаковый скор в случае, когда предсказанные скоры бинарные, альтернативная формула учитвает порядок элементов в списке путем домножения релевантности элемента на вес равный обратному логарифму номера позиции: https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Discounted_Cumulative_Gain
+<br/>
 
 Библиотека | DCG с 1 в числителе | DCG c двойкой в числителе 
 ------------ | ------------- | ------------
