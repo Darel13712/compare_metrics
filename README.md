@@ -30,7 +30,7 @@ OpenRec | - | есть (считают DCG вместро nDCG - в рассче
 BetaRecsys | есть | -
 MSRecommenders  | есть | -
 Elliot  | - | [есть](https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/ndcg/ndcg.py#L125) ([Из релевантностей вычитается порог и добавляется 1](https://github.com/sisinflab/elliot/blob/3bfc068f94a6f87d3f5e22a905b09a643496185a/elliot/evaluation/relevance/relevance.py#L80))
-RecSys2019_DL_Eval | есть (в формуле DCG в знаменателе логарифм натуральный, а не по основанию 2. Для рассчета iDCG берутся все GT relevances, не обрезанные по K) | -
+RecSys2019_DL_Eval | - | есть (в формуле DCG в знаменателе логарифм натуральный, а не по основанию 2. Для рассчета iDCG берутся все GT relevances, не обрезанные по K) 
 DaisyRec | - | есть
 RecSysPytorch | есть | -
 NeuRec | есть | -
