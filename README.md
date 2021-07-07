@@ -7,7 +7,9 @@
 2) AP@K = (сумма precision@i для i, где 0 < i < K и i-й айтем в предсказании - релевантный) / (число релевантных объектов из теста) : rs_metrics, betaRecsys.
 3) AP@K = (сумма precision@i для i, где 0 < i < K и i-й айтем в предсказании - релевантный) / [min(число релевантных объектов из теста, K)](https://github.com/wubinzzu/NeuRec/blob/master/evaluator/backend/python/metric.py#L40) : replay, recBole, neuRec. В формуле используется [cumsum](https://github.com/wubinzzu/NeuRec/blob/master/evaluator/backend/python/metric.py#L39), из-за которого в формуле AP знаменатель получается как сумма из минимумов.
 
-4) AP@K = [все](https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L69) (precision@i, где 0 < i < K) усредняются : elliot. С учетом того, что используются все precision, это равносильно делению на K. MAP не приравнивается нулю для пользователей, у которых нет релевантных айтемов в тесте - для них просто [не выдается](https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L98) MAP, поэтому уреднение MAP всех пользователей дает число выше. 
+4) AP@K = [все](https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L69) (precision@i, где 0 < i < K) усредняются : elliot. С учетом того, что используются все precision, это равносильно делению на K. MAP не приравнивается нулю для пользователей, у которых нет релевантных айтемов в тесте - для них просто [не выдается](https://github.com/sisinflab/elliot/blob/master/elliot/evaluation/metrics/accuracy/map/map.py#L98) MAP, поэтому уреднение MAP всех пользователей дает число выше. <br/>
+- MAP 
+
 <br/>
 
 **HitRate:**<br/>
@@ -118,4 +120,5 @@ beta recsys скопировали себе код MS Recommeders один в о
 - [x] [OpenRec](https://github.com/ylongqi/openrec)
 - [x] [RecsysPytorch](https://github.com/yoongi0428/RecSys_PyTorch)
 - [x] [RecSys19 Evaluation](https://github.com/MaurizioFD/RecSys2019_DeepLearning_Evaluation)
+- [x] [RS Metrics](https://github.com/Darel13712/rs_metrics)
 
