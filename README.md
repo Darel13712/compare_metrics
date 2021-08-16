@@ -1,4 +1,4 @@
-# The Comparison of Metric Implementations
+# Comparison of Metric Implementations
 
 This is a companion repository for the paper **Quality Metrics in Recommender Systems: Do We Calculate Consistently?** Presented as a LBR poster at RecSys'21.
 
